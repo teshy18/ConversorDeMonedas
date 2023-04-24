@@ -1,5 +1,6 @@
 package conversorDeMonedas;
 
+import java.text.DecimalFormat;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,10 +27,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import java.util.ArrayList;
+
 import javax.swing.JSeparator;
 
 
@@ -40,14 +39,16 @@ public class IGU extends JFrame {
 	private JPanel contentPane;
 	private JTextField cantidadInicial;
 	private JTextField resultado;
+	
+	Calculadora calc = new Calculadora();
 
-
-
+	private String valorFinal;
 	private int ejeX , ejeY; 
 	/**
 	 * Create the frame.
 	 */
 	public IGU() {
+
 		setLocationByPlatform(true);
 		setUndecorated(true);
 		setResizable(false);
@@ -155,12 +156,12 @@ public class IGU extends JFrame {
 
 		JComboBox monedaInicial = new JComboBox();
 		monedaInicial.setFont(new Font("Roboto Medium", Font.PLAIN, 14));
-		monedaInicial.setModel(new DefaultComboBoxModel(new String[] {"Pesos Argentinos", "Dólar", "Euros", "Libras Esterlinas", "Yen Japonés", "Won Surcoreano"}));
+		monedaInicial.setModel(new DefaultComboBoxModel(new String[] {"Peso Argentino", "Dólar", "Euro", "Libra Esterlina", "Yen Japonés", "Won Sul-Coreano"}));
 		monedaInicial.setBounds(162, 34, 220, 19);
 		panel.add(monedaInicial);
 
 		JComboBox monedaFinal = new JComboBox();
-		monedaFinal.setModel(new DefaultComboBoxModel(new String[] {"Pesos Argentinos", "Dólar", "Euro", "Libras Esterlinas", "Yen Japonés", "Won Surcoreano"}));
+		monedaFinal.setModel(new DefaultComboBoxModel(new String[] {"Peso Argentino", "Dólar", "Euro", "Libra Esterlina", "Yen Japonés", "Won Sul-Coreano"}));
 		monedaFinal.setFont(new Font("Roboto Medium", Font.PLAIN, 14));
 		monedaFinal.setBounds(162, 109, 220, 19);
 		panel.add(monedaFinal);
@@ -176,7 +177,7 @@ public class IGU extends JFrame {
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				validateInput();
+				
 			}
 
 			@Override
@@ -200,7 +201,7 @@ public class IGU extends JFrame {
 
 		});
 
-		cantidadInicial.setBounds(66, 228, 220, 19);
+		cantidadInicial.setBounds(162, 64, 220, 19);
 		panel.add(cantidadInicial);
 		cantidadInicial.setColumns(10);
 
@@ -208,6 +209,7 @@ public class IGU extends JFrame {
 		resultado.setBounds(162, 139, 220, 19);
 		panel.add(resultado);
 		resultado.setColumns(10);
+
 
 		JLabel lblNewLabel_3_1 = new JLabel("Moneda deseada:  ");
 		lblNewLabel_3_1.setForeground(new Color(0, 128, 64));
@@ -246,19 +248,35 @@ public class IGU extends JFrame {
 
 
 				double cantidadX = 1;
-
+				double salida = 1; 
+				
+				//se valida que exista un valor inicial, este esta seteado en 1 para evitar errores. 
 				if (cantidadInicial.getText()!= "") {
-					cantidadX = Double.parseDouble(cantidadInicial.getText());					
-				}
+					try {
+						cantidadX = Double.parseDouble(cantidadInicial.getText());
+					} catch (NumberFormatException e1) {
 
+						JOptionPane.showMessageDialog(null, "Ingese un valor valido a convertir", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}					
+				}
+				
+				
 				String MI = (String) monedaInicial.getSelectedItem();
 				String MF = (String) monedaFinal.getSelectedItem();
+		
+				calc.setMonedaInicial(MI);
+				calc.setMonedaFinal(MF);
+				salida = calc.convertir(cantidadX);
 
-				Calculadora calculadora = new Calculadora();
+				//System.out.println( cantidadX + " " + MI + " son: " + Math.round(salida) +" "+ MF );
 
-				System.out.println( cantidadX + " " + MI + "a " + MF + "es ");
-
-
+				// Se formatea el valor y se envía al campo de texto resultado en la IGU
+				DecimalFormat df = new DecimalFormat("#.####");
+				valorFinal = df.format(salida);
+				resultado.setText(valorFinal);
+				
+				
 			}
 		});
 		convertirBtn.setBackground(new Color(0, 128, 64));
@@ -271,11 +289,6 @@ public class IGU extends JFrame {
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
 		convertirBtn.add(lblNewLabel_2);
-		
-		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(1.0, 0.0, 2.147483647E9, 10.0));
-		spinner.setBounds(162, 64, 220, 19);
-		panel.add(spinner);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(66, 94, 326, 3);

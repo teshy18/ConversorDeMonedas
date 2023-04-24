@@ -1,11 +1,10 @@
 package conversorDeMonedas;
 
 
-public class Calculadora {
+public  class Calculadora {
 	
 	private Moneda monedaInicial;
 	private Moneda monedaFinal;
-
 	
 	public Moneda getMonedaInicial() {
 		return monedaInicial;
@@ -13,11 +12,13 @@ public class Calculadora {
 	public Moneda getMonedaFinal() {
 		return monedaFinal;
 	}
-	public void setMonedaInicial(Moneda monedaInicial) {
-		this.monedaInicial = monedaInicial;
+	public void setMonedaInicial(String monedaInicial) {
+		Moneda moneda = Conversor.obtenerMonedaPorNombre(monedaInicial);
+		this.monedaInicial = moneda;
 	}
-	public void setMonedaFinal(Moneda monedaFinal) {
-		this.monedaFinal = monedaFinal;
+	public void setMonedaFinal(String monedaFinal) {
+		Moneda moneda = Conversor.obtenerMonedaPorNombre(monedaFinal);
+		this.monedaFinal = moneda;
 	}
 	
 	

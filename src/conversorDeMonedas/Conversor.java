@@ -10,15 +10,24 @@ import java.util.ArrayList;
 //- Convertir de la moneda de tu país  a Won sul-coreano
 
 
-public class Conversor {
+public class Conversor{
 	
 	public static ArrayList<Moneda> monedas = new ArrayList<Moneda>();
-
+	
+	  public static Moneda obtenerMonedaPorNombre(String nombre) {
+	        for (Moneda moneda : monedas) {
+	            if (moneda.getNombre().equals(nombre)) {
+	                return moneda;
+	            }
+	        }
+	        return null; 
+	    }
 	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Calculadora calculadora = new Calculadora();
+		
+	
 		
 		IGU pantalla = new IGU();
 		pantalla.setVisible(true);
@@ -26,9 +35,9 @@ public class Conversor {
 		Moneda pesoArgentino = new Moneda("Peso Argentino", "ARS", 0.0048);
 		Moneda dolar = new Moneda("Dólar", "USD" , 1);
 		Moneda libra = new Moneda("Libra Esterlina", "GBP" , 1.24);
-		Moneda euro = new Moneda("Euros", "EUR" , 1.10);
+		Moneda euro = new Moneda("Euro", "EUR" , 1.10);
 		Moneda yen = new Moneda("Yen Japonés", "JPY" , 0.0075);
-		Moneda won = new Moneda("Won Surcoreano", "KRW" , 0.00076);
+		Moneda won = new Moneda("Won Sul-Coreano", "KRW" , 0.00076);
 		
 		
 		monedas.add(pesoArgentino);
@@ -37,8 +46,7 @@ public class Conversor {
 		monedas.add(euro);
 		monedas.add(libra);
 		monedas.add(won);
-		
-		
+	
 		
 		
 	}
